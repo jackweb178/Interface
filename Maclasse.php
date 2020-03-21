@@ -1,13 +1,13 @@
 <?php
 
-//https://openclassrooms.com/fr/courses/1665806-programmez-en-oriente-objet-en-php/1667174-les-interfaces#/id/r-1670422
-class Maclasse implements Iterator
+//https://openclassrooms.com/fr/courses/1665806-programmez-en-oriente-objet-en-php/1667174-les-interfaces#/id/r-2649370
+class Maclasse implements SeekableIterator
 {
     private $position=0;
     private $tableau=['element 1','element 2','element 3','element 4'];
 
     /**
-     * retourne l'element courant
+     * retourne l'element courant de lindex ou de la position
      */
     public function current()
     {
@@ -45,6 +45,21 @@ class Maclasse implements Iterator
     {
         $this->position=0;
     }
+
+    /**
+     * Deplacer le cursseur interne a une position precise
+     */
+    public function seek($position)
+    {
+        $anciennePosition=$this->position;
+        $this->position=$position;
+
+        if (!$this->valid())
+        {
+            trigger_error("La position specifier n'est pas valide",E_USER_WARNING);
+            $this->position=$anciennePosition;
+        }
+    }
 }
 
 $object=new MaClasse();
@@ -53,3 +68,9 @@ foreach ($object as $key =>$value)
 {
     echo  $key,' => ',$value,'<br/>';
 }
+
+//appelle de la methode seek()
+$object->seek(3);
+echo '<br/>',$object->current();
+
+
