@@ -1,7 +1,7 @@
 <?php
 
-//https://openclassrooms.com/fr/courses/1665806-programmez-en-oriente-objet-en-php/1667174-les-interfaces#/id/r-2649370
-class Maclasse implements SeekableIterator
+//https://openclassrooms.com/fr/courses/1665806-programmez-en-oriente-objet-en-php/1667174-les-interfaces#/id/r-1670450
+class Maclasse implements SeekableIterator, ArrayAccess
 {
     private $position=0;
     private $tableau=['element 1','element 2','element 3','element 4'];
@@ -60,6 +60,38 @@ class Maclasse implements SeekableIterator
             $this->position=$anciennePosition;
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->tableau[$offset]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetGet($offset)
+    {
+        return $this->tableau[$offset];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetSet($offset, $value)
+    {
+        return $this->tableau[$offset]= $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->tableau[$offset]);
+    }
 }
 
 $object=new MaClasse();
@@ -70,7 +102,27 @@ foreach ($object as $key =>$value)
 }
 
 //appelle de la methode seek()
+echo  "<br/>Remise du curseur a la 4 eme positions ! <br/>";
 $object->seek(3);
-echo '<br/>',$object->current();
+echo '<br/> Lelement courant est : ',$object->current(),'<br/>';
 
+//appelle de la methode offsetGet()
+echo "<br/> Affichage du 3emme element  : ",$object[2]," <br/>";
 
+//appelle de la methode offsetSet()
+echo  "<br/> Modifions le 3eme element  : <br/>";
+$object[2]="bonjours tous le monde";
+echo "La nouvelle valeur de la position 3 est : <strong> ",$object[2]," </strong>";
+
+//appelle de la methode offsetUnset()
+echo  " <br/><br>Destruction du 4 eme element : <br/>";
+unset($object[3]);
+
+//appelle de la methode offsetExists()
+if (isset($object[3]))
+{
+    echo '$object[3] exixte  toujours .....bizzar.......';
+}else
+{
+    echo 'Tous ce passe bien $object[3] nexiste plus !';
+}
