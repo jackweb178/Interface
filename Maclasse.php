@@ -1,7 +1,8 @@
 <?php
 
-//https://openclassrooms.com/fr/courses/1665806-programmez-en-oriente-objet-en-php/1667174-les-interfaces#/id/r-1670450
-class Maclasse implements SeekableIterator, ArrayAccess
+//https://openclassrooms.com/fr/courses/1665806-programmez-en-oriente-objet-en-php/1667174-les-interfaces#/id/r-1670458
+//compter les elements dun tableau
+class Maclasse implements SeekableIterator, ArrayAccess ,Countable
 {
     private $position=0;
     private $tableau=['element 1','element 2','element 3','element 4'];
@@ -92,8 +93,15 @@ class Maclasse implements SeekableIterator, ArrayAccess
     {
         unset($this->tableau[$offset]);
     }
-}
 
+    /**
+     * @inheritDoc
+     */
+    public function count()
+    {
+        return count($this->tableau);
+    }
+}
 $object=new MaClasse();
 
 foreach ($object as $key =>$value)
@@ -126,3 +134,17 @@ if (isset($object[3]))
 {
     echo 'Tous ce passe bien $object[3] nexiste plus !';
 }
+//appelle de la fonction count()
+echo "<br> <br> Le nombre d'element du tableau est de  : ",$object->count();
+
+/*la class ArrayIterrator comporte toutes les methodes de notre classe MaClass issu des differentes interface implementer*/
+/*class  s extends ArrayIterator//
+{
+
+}
+$s=new s();
+$s->current();
+$s->offsetExists();
+.
+.
+.*/
